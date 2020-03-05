@@ -1,12 +1,16 @@
 version: "3.7"
 services:
   notebook:
-    image: jupyter/all-spark-notebook:latest
+    build:
+      context: .
+      dockerfile: NotebookDockerfile
     env_file:
       - .env
     ports:
       - 8888:8888
       - 4040:4040
+    volumes:
+      - ./log4j.properties:/usr/local/spark/conf/log4j.properties
   localstack-s3:
     image: localstack/localstack:0.10.7
     environment:
@@ -18,7 +22,7 @@ services:
       - 4567-4584:4567-4584
       - 8055:8080
     volumes:
-      - ./localstack:/docker-entrypoint-initaws.d
+      - ./localstack-entrypoint.sh:/docker-entrypoint-initaws.d/localstack-entrypoint.sh
       - ./data/s3:/tmp/localstack
   spark-master:
     image: spark:2.4.5-worker

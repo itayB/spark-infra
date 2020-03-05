@@ -9,8 +9,10 @@ This repository provides a full local environment to run Spark via Jupiter noteb
  ## Run with docker-compose and spark in stand-alone mode
 First, build spark 2.4.5 image:
  `docker build -t spark:2.4.5-worker .`
+ 
 Run docker-compose:
  `docker-compose up`
+ 
 Open Jupiter notebook in your browser: http://localhost:8888 and create a new Python3 notebook with the following:
 ```
 import os
@@ -37,6 +39,31 @@ rdd = sc.parallelize(range(100000))
 x=rdd.sumApprox(3)
 print(x)
 sc.stop()
+```
+Here is another example that accessing S3 for counting parquet files:
+```
+import os
+
+# make sure pyspark tells workers to use python3 not 2 if both are installed
+os.environ['PYSPARK_PYTHON'] = '/usr/bin/python3'
+os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages com.amazonaws:aws-java-sdk:1.7.4,org.apache.hadoop:hadoop-aws:2.7.0 pyspark-shell'
+
+
+import pyspark
+
+spark = pyspark.sql.SparkSession.builder \
+        .master("spark://spark-master:7077") \
+        .config("spark.driver.memory", '1G') \
+        .config("spark.executor.memory", "1G") \
+        .config("spark.hadoop.fs.s3a.access.key", '<change_me>') \
+        .config("spark.hadoop.fs.s3a.secret.key", '<change_me>') \
+        .getOrCreate()
+
+df = spark.read.parquet("s3a://my_bucket/folder1/date=2020-03-03/client=1000")
+
+print(df.count())
+
+
 ```
 
 
