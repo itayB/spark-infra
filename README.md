@@ -42,13 +42,6 @@ sc.stop()
 ```
 Here is another example that accessing S3 for counting parquet files:
 ```
-import os
-
-# make sure pyspark tells workers to use python3 not 2 if both are installed
-os.environ['PYSPARK_PYTHON'] = '/usr/bin/python3'
-os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages com.amazonaws:aws-java-sdk:1.7.4,org.apache.hadoop:hadoop-aws:2.7.0 pyspark-shell'
-
-
 import pyspark
 
 spark = pyspark.sql.SparkSession.builder \
@@ -60,7 +53,7 @@ spark = pyspark.sql.SparkSession.builder \
         .getOrCreate()
 
 df = spark.read.parquet("s3a://my_bucket/folder1/date=2020-03-03/client=1000")
-
+df.printSchema()
 print(df.count())
 spark.stop()
 

@@ -6,11 +6,13 @@ services:
       dockerfile: NotebookDockerfile
     env_file:
       - .env
+      - notebook.env
     ports:
       - 8888:8888
       - 4040:4040
     volumes:
       - ./log4j.properties:/usr/local/spark/conf/log4j.properties
+      - ./data/notebook:/home/jovyan/work
   localstack-s3:
     image: localstack/localstack:0.10.7
     environment:
