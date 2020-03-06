@@ -62,7 +62,7 @@ spark = pyspark.sql.SparkSession.builder \
 df = spark.read.parquet("s3a://my_bucket/folder1/date=2020-03-03/client=1000")
 
 print(df.count())
-
+spark.stop()
 
 ```
 
