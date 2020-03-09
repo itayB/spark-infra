@@ -28,4 +28,4 @@ RUN curl -O https://repo1.maven.org/maven2/io/fabric8/kubernetes-client/4.4.2/ku
 WORKDIR /home/spark/sparkjobs
 COPY log4j.properties /usr/local/spark/conf/log4j.properties
 COPY . /home/spark/sparkjobs/
-CMD ["/bin/bash", "./start-worker.sh"]
+CMD ["/bin/bash", "./entrypoint.sh"]
