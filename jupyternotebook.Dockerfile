@@ -14,4 +14,6 @@ echo "c.InteractiveShellApp.extensions.append('sparkmonitor.kernelextension')" >
 RUN cd /opt/conda/lib/python3.8/site-packages/pyspark/jars && wget --quiet "https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.888/aws-java-sdk-bundle-1.11.888.jar"
 RUN cd /opt/conda/lib/python3.8/site-packages/pyspark/jars && wget --quiet "https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/hadoop-aws-3.2.0.jar"
 
+USER root
+
 CMD jupyter notebook --port=8888 --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token=''
