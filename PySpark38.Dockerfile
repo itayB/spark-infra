@@ -1,4 +1,4 @@
-FROM 884661243007.dkr.ecr.us-east-1.amazonaws.com/spark:3.0.1-aws
+FROM itayb/spark:3.0.1-hadoop-3.2.0-aws
 
 RUN apt-get update
 RUN apt install -y software-properties-common
@@ -16,7 +16,3 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN mkdir -p /opt/conda/lib/python3.8/site-packages/pyspark/jars
 RUN cd /opt/conda/lib/python3.8/site-packages/pyspark/jars && wget --quiet "https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.888/aws-java-sdk-bundle-1.11.888.jar"
 RUN cd /opt/conda/lib/python3.8/site-packages/pyspark/jars && wget --quiet "https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/hadoop-aws-3.2.0.jar"
-
-
-
-#RUN pip3 install sparkmonitor==1.1.1
