@@ -1,22 +1,34 @@
-FROM jupyter/pyspark-notebook:016833b15ceb
+FROM itayb/spark:3.1.1-hadoop-3.2.0-aws
 
-RUN pip install pyspark==3.0.1
-
-RUN pip install ipynb==0.5.1
+RUN pip install \
+    notebook==6.2.0 \
+    ipynb==0.5.1 \
+    sparkmonitor==1.1.1 \
+    pyspark==3.1.1
 
 # install extension to monitor spark
-RUN pip install sparkmonitor==1.1.1
 RUN jupyter nbextension install sparkmonitor --py --user --symlink
 RUN jupyter nbextension enable  sparkmonitor --py
 RUN jupyter serverextension enable --py --user --debug sparkmonitor
 RUN ipython profile create && \
 echo "c.InteractiveShellApp.extensions.append('sparkmonitor.kernelextension')" >>  $(ipython profile locate default)/ipython_kernel_config.py
 
-# AWS support
-RUN cd /opt/conda/lib/python3.8/site-packages/pyspark/jars && wget --quiet "https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.888/aws-java-sdk-bundle-1.11.888.jar"
-RUN cd /opt/conda/lib/python3.8/site-packages/pyspark/jars && wget --quiet "https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/hadoop-aws-3.2.0.jar"
+RUN ln -s /usr/local/lib/python3.8/site-packages/sparkmonitor/listener_2.12.jar /opt/spark/jars/listener_2.12.jar
 
 USER root
 
 CMD jupyter notebook --port=8888 --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --notebook-dir=/home/notebook/
 
+RUN echo $'\n\
+spec:\n\
+  containers:\n\
+  - name: executor\n\
+  image: "itayb/spark:3.1.1-hadoop-3.2.0-python-3.8.6-aws"\n\
+  resources:\n\
+    limits:\n\
+      cpu: 1000m\n\
+      memory: 2048Mi\n\
+    requests:\n\
+      cpu: 1000m\n\
+      memory: 1024Mi\n\
+' > /podTemplate.yml
