@@ -92,5 +92,6 @@ registry-docker-registry-68cf4d8d8-m2bls   1/1     Running   0          27s
 ```
 
 References:  
+- [Jupyter Notebook & Spark on Kubernetes](https://towardsdatascience.com/jupyter-notebook-spark-on-kubernetes-880af7e06351)
 - [Running Spark on Kubernetes](https://tech.olx.com/running-spark-on-kubernetes-a-fully-functional-example-and-why-it-makes-sense-for-olx-d56b6a61fcbe)  
 - [Jupyter notebook in docker](https://github.com/jupyter/docker-stacks/blob/master/pyspark-notebook/Dockerfile)
